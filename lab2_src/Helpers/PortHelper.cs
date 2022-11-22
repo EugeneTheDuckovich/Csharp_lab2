@@ -2,7 +2,7 @@
 
 namespace lab2_src.PortExtentions;
 
-internal static class PortExtentions
+internal static class PortHelper
 {
     public static int GetServiceTime(this IPort port, int shipsAmount)
     {

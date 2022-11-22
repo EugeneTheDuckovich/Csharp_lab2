@@ -2,33 +2,36 @@
 
 namespace lab2_src.Model;
 
-internal class Port : IPort
+public class Port : IPort
 {
     public string Name { get; }
     public string Adress { get; }
 
-    private int _workersAmount;
-    private int _vehiclesAmount;
-    private int _docksAmount;
-    public int WorkersAmount { get => _workersAmount; }
+    public int WorkersAmount { get; private set; }
 
-    public int VehiclesAmount { get => _vehiclesAmount; }
+    public int VehiclesAmount { get; private set; }
     public int VehiclePrice { get; }
 
-    public int DocksAmount { get => _docksAmount; }
+    public int DocksAmount { get; private set; }
 
     public int ShipServiceTime { get; }
     public int ShipServicePrice { get; }
 
-    public Port(string name, string adress, int shipServiseTime, int shipServicePrice, int docksAmount)
+    public int FunctionigDocks 
+    { 
+        get => Math.Min(Math.Min(DocksAmount, WorkersAmount / 15), VehiclesAmount / 5);
+    }
+
+    public Port(string name, string adress, int docksAmount, int shipServiseTime, int shipServicePrice, int vehiclePrice)
     {
         Name = name;
         Adress = adress;
+        DocksAmount = docksAmount;
         ShipServiceTime = shipServiseTime;
         ShipServicePrice = shipServicePrice;
-        _docksAmount = docksAmount;
-        _vehiclesAmount = docksAmount * 5;
-        _workersAmount = docksAmount * 15;
+        VehiclePrice = vehiclePrice;
+        VehiclesAmount = docksAmount * 5;
+        WorkersAmount = docksAmount * 15;
     }
 
     public Port(Port other)
@@ -37,27 +40,21 @@ internal class Port : IPort
         Adress = other.Adress;
         ShipServicePrice = other.ShipServicePrice;
         ShipServiceTime = other.ShipServiceTime;
-        _docksAmount = other._docksAmount;
-        _vehiclesAmount = other._vehiclesAmount;
-        _workersAmount = other._workersAmount;
+        DocksAmount = other.DocksAmount;
+        VehiclesAmount = other.VehiclesAmount;
+        WorkersAmount = other.WorkersAmount;
     }
 
     public static Port operator ++(Port port)
     {
-        port._docksAmount++;
-        port._vehiclesAmount += 5;
+        port.DocksAmount++;
+        port.VehiclesAmount += 5;
         return port;
-    }
-
-    private int GetFunctioningDocksAmount()
-    {
-        var min = Math.Min(_docksAmount, _workersAmount / 15);
-        return Math.Min(min, _vehiclesAmount/5);
     }
 
     public static bool operator >=(Port first, Port second)
     {
-        return first.GetFunctioningDocksAmount() >= second.GetFunctioningDocksAmount();
+        return first.FunctionigDocks >= second.FunctionigDocks;
     }
 
     public static bool operator <=(Port first, Port second)
@@ -67,41 +64,46 @@ internal class Port : IPort
 
     public void HireWorker()
     {
-        _workersAmount++;
+        WorkersAmount++;
     }
 
     public void HireSeveralWorkers(int hiredWorkersAmount)
     {
-        _workersAmount += hiredWorkersAmount;
+        WorkersAmount += hiredWorkersAmount;
     }
     
     public void FireWorker()
     {
-        if (_workersAmount > 0) _workersAmount--;
+        if (WorkersAmount > 0) WorkersAmount--;
     }
 
     public void FireSeveralWorkers(int firedWorkersAmount)
     {
-        if (_workersAmount <= firedWorkersAmount) _workersAmount = 0;
-        else _workersAmount -= firedWorkersAmount;
+        if (WorkersAmount <= firedWorkersAmount) WorkersAmount = 0;
+        else WorkersAmount -= firedWorkersAmount;
     }
 
     public int GetIncomeAfterService(int shipsAmount)
     {
-        return (ShipServicePrice * shipsAmount) / (VehiclePrice * 5 * shipsAmount);
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if(obj == null) return false;
-        if(obj.GetType() != this.GetType()) return false;
-        var portObj = (Port)obj;
-        return this.Name == portObj.Name && this.Adress == portObj.Adress;
+        return (ShipServicePrice - VehiclePrice * 5) * shipsAmount;
     }
 
     public override int GetHashCode()
     {
         return Name.GetHashCode() ^ Adress.GetHashCode();
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Port);
+    }
+
+    public bool Equals(IPort? other)
+    {
+        if(other == null) return false;
+        if(ReferenceEquals(this, other)) return true;
+
+        return this.GetHashCode() == other.GetHashCode();
     }
 
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace lab2_src.Model;
 
-internal interface IPort
+public interface IPort : IEquatable<IPort>
 {
     string Name { get; }
     string Adress { get; }
@@ -14,6 +14,7 @@ internal interface IPort
     int VehiclesAmount { get; }
     int VehiclePrice { get; }
     int DocksAmount { get; }
+    int FunctionigDocks { get; }
     int ShipServiceTime { get; }
     int ShipServicePrice { get; }
     void HireWorker();
