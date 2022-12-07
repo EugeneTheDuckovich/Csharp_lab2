@@ -36,22 +36,6 @@ public partial class PortCreationForm : Form
         _controller.PortsListBox.Location = new Point(10, toolBar.Bottom + Padding.Top);
         _controller.UpdateListBox();
 
-        //var mainMenuButton = new Button();
-        //mainMenuButton.Text = "back to menu";
-        //mainMenuButton.Location = new Point(590, 10);
-        //mainMenuButton.Size = new Size(200, 30);
-        //mainMenuButton.TabIndex = 11;
-        //mainMenuButton.Click += MainMenuButton_Click;
-
-        //var portsViewButton = new Button();
-        //portsViewButton.Text = "view ports";
-        //portsViewButton.Location = 
-        //    new Point(mainMenuButton.Location.X, mainMenuButton.Bounds.Bottom + Padding.Top);
-        //portsViewButton.Size = mainMenuButton.Size;
-        //portsViewButton.TabIndex = 11;
-        //portsViewButton.Click += PortsViewButton_Click;
-
-
 
         _textBoxes = new TextBox[6];
         var labels = new Label[6];

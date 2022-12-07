@@ -1,5 +1,6 @@
 ﻿using lab2_src.Model;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace lab2_src.Controller;
 
@@ -31,7 +32,7 @@ public class PortController : IPortController
         _ports.Clear();
     }
 
-    public IPort? GetPortByName(string name)
+    public IPort? FindPortByName([DisallowNull]string name)
     {
         try
         {
@@ -50,10 +51,10 @@ public class PortController : IPortController
 
     public void RemovePort(IPort port)
     {
-        var pair = _ports.FirstOrDefault(p => p.Value == port);
-        if(pair.Equals(default(KeyValuePair<string, Port>))) return;
+        var pair = _ports.FirstOrDefault(p => p.Value == port).Key;
+        if(string.IsNullOrEmpty(pair)) return;
 
-        _ports.Remove(pair.Key);
+        _ports.Remove(pair);
     }
 
     public void UpdateListBox()

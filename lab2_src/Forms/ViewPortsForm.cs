@@ -232,39 +232,45 @@ public partial class PortsViewForm : Form
 
     private void PortComparisonButton_Click(object? sender, EventArgs e)
     {
-        Port? first = _controller.GetPortByName(_portComparisonTextBoxes[0].Text) as Port;
-        Port? second = _controller.GetPortByName(_portComparisonTextBoxes[1].Text) as Port;
+        var first = _controller.FindPortByName(_portComparisonTextBoxes[0].Text);
+        var second = _controller.FindPortByName(_portComparisonTextBoxes[1].Text);
         if (first == null || second == null) return;
 
-        if (first >= second && first <= second) _portComparisonTextBoxes[2].Text = $"{first.Name} = {second.Name}";
+        if (first.Equals(second)) _portComparisonTextBoxes[2].Text = $"{first.Name} = {second.Name}";
         else if(first >= second) _portComparisonTextBoxes[2].Text = $"{first.Name} > {second.Name}";
         else _portComparisonTextBoxes[2].Text = $"{first.Name} < {second.Name}";
     }
 
     private void DocksIncrementButton_Click(object? sender, EventArgs e)
     {
-        var selPort = _selectedPort as Port;
+        if (_selectedPort == null) return;
 
-        if (selPort == null) return;
+        var asPort = _selectedPort as Port;
+        asPort++;
 
-        selPort++;
         PortsListBox_SelectedValueChanged(new object(), new EventArgs());
     }
 
     private void FireButton_Click(object? sender, EventArgs e)
     {
+        if (_selectedPort == null) return;
+
         _selectedPort.FireWorker();
         PortsListBox_SelectedValueChanged(new object(), new EventArgs());
     }
 
     private void HireButton_Click(object? sender, EventArgs e)
     {
+        if (_selectedPort == null) return;
+
         _selectedPort.HireWorker();
         PortsListBox_SelectedValueChanged(new object(), new EventArgs());
     }
 
     private void ShipServiceButton_Click(object? sender, EventArgs e)
     {
+        if (_selectedPort == null) return;
+
         if (string.IsNullOrEmpty(_shipServiceTextBoxes[0].Text)) return;
 
         int parsedShipsAmount = 0;
@@ -277,7 +283,10 @@ public partial class PortsViewForm : Form
 
     private void PortsListBox_SelectedValueChanged(object? sender, EventArgs e)
     {
-        _selectedPort = _controller.GetPortByName(_controller.PortsListBox.SelectedItem.ToString());
+        var name = _controller.PortsListBox.SelectedItem.ToString();
+        if (string.IsNullOrEmpty(name)) return;
+
+        _selectedPort = _controller.FindPortByName(name);
         if(_selectedPort == null) return;
 
         _dataTextBoxes[0].Text = _selectedPort.Name;
@@ -291,12 +300,12 @@ public partial class PortsViewForm : Form
         _dataTextBoxes[8].Text = _selectedPort.WorkersAmount.ToString();
     }
 
-    private void GoToMainMenuToolBoxItem_Click(object? sender, System.EventArgs e)
+    private void GoToMainMenuToolBoxItem_Click(object? sender, EventArgs e)
     {
         CommonEvents.ChangeForm(this, FormType.MainMenu, _controller);
     }
 
-    private void GoToPortCreationToolBoxitem_Click(object? sender, System.EventArgs e)
+    private void GoToPortCreationToolBoxitem_Click(object? sender, EventArgs e)
     {
         CommonEvents.ChangeForm(this, FormType.PortCreation, _controller);
     }

@@ -15,7 +15,7 @@ public interface IPortController
 
     public void AddPort(IPort port);
 
-    public IPort? GetPortByName(string name);
+    public IPort? FindPortByName(string name);
 
     public IPort[] Ports { get; }
 

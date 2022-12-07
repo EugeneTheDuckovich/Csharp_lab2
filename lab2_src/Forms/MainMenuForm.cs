@@ -12,6 +12,7 @@ public partial class MainMenuForm : Form
         InitializeComponent();
         this.Closed += CommonEvents.OnClosing;
         this.CenterToScreen();
+        this.Text = "Main menu";
 
         if (_controller == null) _controller = new PortController();
 
@@ -57,4 +58,5 @@ public partial class MainMenuForm : Form
     {
         CommonEvents.ChangeForm(this, FormType.PortView, _controller);
     }
+
 }

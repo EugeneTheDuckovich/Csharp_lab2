@@ -52,16 +52,6 @@ public class Port : IPort
         return port;
     }
 
-    public static bool operator >=(Port first, Port second)
-    {
-        return first.FunctionigDocks >= second.FunctionigDocks;
-    }
-
-    public static bool operator <=(Port first, Port second)
-    {
-        return second >= first;
-    }
-
     public void HireWorker()
     {
         WorkersAmount++;

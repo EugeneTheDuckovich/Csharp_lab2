@@ -17,6 +17,16 @@ public interface IPort : IEquatable<IPort>
     int FunctionigDocks { get; }
     int ShipServiceTime { get; }
     int ShipServicePrice { get; }
+
+    static bool operator >=(IPort first, IPort second)
+    {
+        return first.FunctionigDocks >= second.FunctionigDocks;
+    }
+
+    static bool operator <=(IPort first, IPort second)
+    {
+        return second >= first;
+    }
     void HireWorker();
     void HireSeveralWorkers(int hiredWorkersAmount);
     void FireWorker();
